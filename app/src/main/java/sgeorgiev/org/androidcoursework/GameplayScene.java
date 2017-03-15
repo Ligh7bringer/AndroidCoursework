@@ -45,7 +45,7 @@ public class GameplayScene implements Scene {
         canvas.drawColor(Color.WHITE);
         player.draw(canvas);
         obstacleManager.draw(canvas);
-        
+
         if(gameOver) {
             Paint paint = new Paint();
             paint.setTextSize(100);
