@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.SurfaceHolder;
+import android.widget.Toast;
 
 /**
  * Created by Svetlozar Georgiev on 14/03/2017.
@@ -69,7 +70,6 @@ public class MainThread extends Thread {
                 avgFPS = 1000/((totalTime/frameCount)/1000000);
                 frameCount = 0;
                 totalTime = 0;
-                Log.d("FPS: ", String.valueOf(avgFPS));
             }
         }
     }
