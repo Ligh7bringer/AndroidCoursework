@@ -32,14 +32,7 @@ public class Obstacle implements GameObject {
     }
 
     public boolean playerCollide(Player player) {
-        // check for collisions on all sides
-        if(rectangle.contains(player.getPlayer().left, player.getPlayer().top) ||
-           rectangle.contains(player.getPlayer().right, player.getPlayer().top) ||
-           rectangle.contains(player.getPlayer().left, player.getPlayer().bottom) ||
-           rectangle.contains(player.getPlayer().right, player.getPlayer().bottom))
-                return true; // return true if there was a collision
-        //return false if there wasn't
-        return false;
+        return Rect.intersects(player.getPlayer(), rectangle) || Rect.intersects(player.getPlayer(), rectangle2);
     }
 
     @Override

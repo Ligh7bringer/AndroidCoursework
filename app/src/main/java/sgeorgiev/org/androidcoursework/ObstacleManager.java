@@ -1,6 +1,8 @@
 package sgeorgiev.org.androidcoursework;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 import java.util.ArrayList;
 
@@ -15,6 +17,8 @@ public class ObstacleManager {
     private int obstacleHeight;
     private int colour;
     private long startTime;
+    private long initTime;
+    private int score = 0;
 
     public ObstacleManager(int playerGap, int obstacleGap, int obstacleHeight, int colour) {
         this.playerGap = playerGap;
@@ -22,10 +26,18 @@ public class ObstacleManager {
         this.obstacleHeight = obstacleHeight;
         this.colour = colour;
         this.obstacleGap = obstacleGap;
-        startTime = System.currentTimeMillis();
+        startTime = initTime = System.currentTimeMillis();
 
         obstacles = new ArrayList<>();
         populateObstacles();
+    }
+
+    public boolean playerCollide(Player player) {
+        for(Obstacle ob : obstacles) {
+            if(ob.playerCollide(player))
+                return true;
+        }
+        return false;
     }
 
     private void populateObstacles() {
@@ -40,7 +52,7 @@ public class ObstacleManager {
     public void update() {
         int deltaTime = (int) (System.currentTimeMillis() - startTime);
         startTime = System.currentTimeMillis();
-        float speed = Constants.SCREEN_HEIGHT/10000.0f;
+        float speed = (float)(Math.sqrt(1 + (startTime - initTime)/2000.0)) * Constants.SCREEN_HEIGHT/10000.0f;
         for (Obstacle ob : obstacles )
             ob.incrementY(speed * deltaTime);
         if(obstacles.get(obstacles.size() - 1).getRectangle().top >= Constants.SCREEN_HEIGHT) {
@@ -48,12 +60,16 @@ public class ObstacleManager {
             obstacles.add(0, new Obstacle(obstacleHeight, colour, xStart, obstacles.get(0).getRectangle().top - obstacleHeight - obstacleGap,
                     playerGap));
             obstacles.remove(obstacles.size() - 1);
+            score++;
         }
     }
 
     public void draw(Canvas canvas) {
-        for (Obstacle ob : obstacles) {
+        for (Obstacle ob : obstacles)
             ob.draw(canvas);
-        }
+        Paint paint = new Paint();
+        paint.setColor(Color.MAGENTA);
+        paint.setTextSize(100);
+        canvas.drawText("" + score, 50, 50 + paint.descent() - paint.ascent(), paint);
     }
 }
